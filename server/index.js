@@ -16,7 +16,7 @@ app.use(
   cors({
     origin: [
       "http://localhost:5173",
-      "https://ai-analysis-dashboard-one.vercel.app",
+      "https://ai-analysis-dashboard-xi.vercel.app",
     ],
     credentials: true,
   }),
