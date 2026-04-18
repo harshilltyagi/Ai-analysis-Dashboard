@@ -161,10 +161,6 @@ function Signup() {
                   className="w-full rounded-2xl border border-[#eadfce] bg-white px-4 py-3 outline-none focus:border-[#f08c33]"
                 >
                   <option value="student">Student</option>
-
-                  <option value="analyst">Analyst</option>
-
-                  <option value="admin">Admin</option>
                 </select>
               </div>
 
