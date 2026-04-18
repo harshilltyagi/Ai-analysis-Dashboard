@@ -2,22 +2,38 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
+
 import authRoutes from "./routes/authRoutes.js";
-import authMiddleware from "./middleware/authMiddleware.js";
 import aiRoutes from "./routes/aiRoutes.js";
+import authMiddleware from "./middleware/authMiddleware.js";
 
 dotenv.config();
 
 const app = express();
 
-app.use(cors());
+/* CORS */
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173",
+      "https://ai-analysis-dashboard-one.vercel.app/",
+    ],
+    credentials: true,
+  }),
+);
+
 app.use(express.json());
 
+/* Health check */
 app.get("/", (req, res) => {
-  res.send("API running");
+  res.status(200).send("API running");
 });
-app.use("/api/ai", aiRoutes);
+
+/* Public routes */
 app.use("/api/auth", authRoutes);
+
+/* Protected routes */
+app.use("/api/ai", authMiddleware, aiRoutes);
 
 app.get("/api/protected", authMiddleware, (req, res) => {
   res.status(200).json({
@@ -28,13 +44,14 @@ app.get("/api/protected", authMiddleware, (req, res) => {
 
 const PORT = process.env.PORT || 4000;
 
-console.log("URI loaded:", process.env.MONGO_URI);
+/* Mongo connect */
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => {
     console.log("MongoDB connected");
+
     app.listen(PORT, () => {
-      console.log(`Server running on ${PORT}`);
+      console.log(`Server running on port ${PORT}`);
     });
   })
   .catch((error) => {
