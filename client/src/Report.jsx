@@ -24,7 +24,7 @@ const COLORS = [
 ];
 
 function Report() {
-  const API_URL = import.meta.env.VITE_API_URL;
+  const API_URL = import.meta.env.VITE_API_URL.replace(/\/$/, "");
   const navigate = useNavigate();
   const reportRef = useRef(null);
 
@@ -218,10 +218,13 @@ function Report() {
         setLoadingReport(true);
         setReportError("");
 
+        const token = localStorage.getItem("token");
+
         const res = await fetch(`${API_URL}/api/ai/analyze`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
             data: csvData,
@@ -288,10 +291,13 @@ function Report() {
       setAiLoading(true);
       setAiError("");
 
+      const token = localStorage.getItem("token");
+
       const res = await fetch(`${API_URL}/api/ai/ask`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
           question,
